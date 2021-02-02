@@ -151,6 +151,47 @@ var EulerFactory = (
             }
         }
 
+        Euler.utils.largeMax = function (a,b) {
+            if (!isNaN(+a) && !isNaN(+b) && isFinite(+a) && isFinite(+b)) {
+                return a > b ? a : b;
+            }
+            var maxLen = Math.max((''+a).length, (''+b).length);
+            var _a = (''+a).padStart(maxLen, '0');
+            var _b = (''+b).padStart(maxLen, '0');
+
+            return _a > _b ? a : b;
+        }
+
+        Euler.utils.largeMin = function (a,b) {
+            if (!isNaN(+a) && !isNaN(+b) && isFinite(+a) && isFinite(+b)) {
+                return a > b ? b : a;
+            }
+            var maxLen = Math.max((''+a).length, (''+b).length);
+            var _a = (''+a).padStart(maxLen, '0');
+            var _b = (''+b).padStart(maxLen, '0');
+
+            return _a > _b ? b : a;
+        }
+
+        Euler.utils.largeFactorial = function (num) {
+            var n = num;
+            for (let i=num-1; i>1; i--) {
+                n = Euler.utils.largeProduct(n,i);
+            }
+            return n;
+        }
+
+        //TODO: change algorithm
+        Euler.utils.largeProduct = function (...args) {
+            var num1 = Euler.utils.largeMax(args[0], args[1]);
+            var num2 = Euler.utils.largeMin(args[0], args[1]);
+            var curNum = num1;
+            for (var i=1; i<num2; i++) {
+                curNum = Euler.utils.largeSum(curNum,num1);
+            }
+            return curNum;
+        }
+
         Euler.utils.largePow = function (...args) {
             var curNum = args[0];
 
