@@ -89,6 +89,19 @@ var EulerFactory = (
             }
         }();
 
+        Euler.utils.largePow = function (...args) {
+            var curNum = args[0];
+
+            for (var i = 2; i <= args[1]; i++) {
+                var _curNum = curNum;
+                for (var j = 1; j < args[0]; j++) {
+                    _curNum = Euler.utils.largeSum(_curNum, curNum);
+                }
+                curNum = _curNum;
+            }
+            return curNum;
+        }
+
         Euler.utils.largeSum = function (a, b) {
             a = '' + a;
             b = '' + b;
