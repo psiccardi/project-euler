@@ -39,6 +39,48 @@ var EulerFactory = (
             return sum;
         }
 
+        Euler.utils.getPermutations = function (str, nth) {
+            var found = false;
+            var permArray = [];
+            var strArray = str.split('').sort((a, b) => {
+                return a.localeCompare(b, undefined, { sensivity: 'base' })
+            });
+            permArray.push(strArray.join(''));
+            do {
+                found = false
+                var W = -1;
+                for (var k = 0; k < strArray.length - 1; k++) {
+                    if (strArray[k].localeCompare(strArray[k + 1], undefined, { sensivity: 'base' }) == -1) {
+                        W = k;
+                        found = true;
+                    }
+                }
+                if (found) {
+                    var I = W + 1;
+                    for (var k = W + 1; k < strArray.length; k++) {
+                        if (strArray[W].localeCompare(strArray[k], undefined, { sensivity: 'base' }) == -1) {
+                            I = k;
+                        }
+                    }
+                    var tmp = strArray[W];
+                    strArray[W] = strArray[I];
+                    strArray[I] = tmp;
+                    strArray = [].concat(strArray.slice(0, W + 1), strArray.slice(W + 1).reverse());
+                    permArray.push(strArray.join(''));
+                    if (permArray.length % 1000 == 0)
+                        console.log(permArray.length);
+                    if (typeof nth !== undefined && permArray.length === nth) {
+                        found = false;
+                    }
+                }
+            } while (found)
+            return permArray;
+        }
+
+        Euler.utils.getProperDivisorsSum = function (n) {
+            return Euler.utils.getDivisors(n).reduce((a, b) => a + b) - n;
+        }
+
         Euler.utils.getDivisors = function (n) {
             var divisors = [];
             if (n <= 1) {
@@ -151,32 +193,32 @@ var EulerFactory = (
             }
         }
 
-        Euler.utils.largeMax = function (a,b) {
+        Euler.utils.largeMax = function (a, b) {
             if (!isNaN(+a) && !isNaN(+b) && isFinite(+a) && isFinite(+b)) {
                 return a > b ? a : b;
             }
-            var maxLen = Math.max((''+a).length, (''+b).length);
-            var _a = (''+a).padStart(maxLen, '0');
-            var _b = (''+b).padStart(maxLen, '0');
+            var maxLen = Math.max(('' + a).length, ('' + b).length);
+            var _a = ('' + a).padStart(maxLen, '0');
+            var _b = ('' + b).padStart(maxLen, '0');
 
             return _a > _b ? a : b;
         }
 
-        Euler.utils.largeMin = function (a,b) {
+        Euler.utils.largeMin = function (a, b) {
             if (!isNaN(+a) && !isNaN(+b) && isFinite(+a) && isFinite(+b)) {
                 return a > b ? b : a;
             }
-            var maxLen = Math.max((''+a).length, (''+b).length);
-            var _a = (''+a).padStart(maxLen, '0');
-            var _b = (''+b).padStart(maxLen, '0');
+            var maxLen = Math.max(('' + a).length, ('' + b).length);
+            var _a = ('' + a).padStart(maxLen, '0');
+            var _b = ('' + b).padStart(maxLen, '0');
 
             return _a > _b ? b : a;
         }
 
         Euler.utils.largeFactorial = function (num) {
             var n = num;
-            for (let i=num-1; i>1; i--) {
-                n = Euler.utils.largeProduct(n,i);
+            for (let i = num - 1; i > 1; i--) {
+                n = Euler.utils.largeProduct(n, i);
             }
             return n;
         }
@@ -186,8 +228,8 @@ var EulerFactory = (
             var num1 = Euler.utils.largeMax(args[0], args[1]);
             var num2 = Euler.utils.largeMin(args[0], args[1]);
             var curNum = num1;
-            for (var i=1; i<num2; i++) {
-                curNum = Euler.utils.largeSum(curNum,num1);
+            for (var i = 1; i < num2; i++) {
+                curNum = Euler.utils.largeSum(curNum, num1);
             }
             return curNum;
         }
