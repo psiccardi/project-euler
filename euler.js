@@ -220,13 +220,17 @@ var EulerFactory = (
             for (let i = num - 1; i > 1; i--) {
                 n = Euler.utils.largeProduct(n, i);
             }
-            return n;
+            return n > 0 ? n : 1;
         }
 
         //TODO: change algorithm
         Euler.utils.largeProduct = function (...args) {
+            
             var num1 = Euler.utils.largeMax(args[0], args[1]);
             var num2 = Euler.utils.largeMin(args[0], args[1]);
+            if (num1 == 0 || num2 == 0) {
+                return 0;
+            }
             var curNum = num1;
             for (var i = 1; i < num2; i++) {
                 curNum = Euler.utils.largeSum(curNum, num1);
