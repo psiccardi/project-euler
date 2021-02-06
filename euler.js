@@ -193,10 +193,21 @@ var EulerFactory = (
             }
         }
 
-        Euler.utils.largeMax = function (a, b) {
-            if (!isNaN(+a) && !isNaN(+b) && isFinite(+a) && isFinite(+b)) {
-                return a > b ? a : b;
+        Euler.utils.largeFibonacci = function() {
+            var memo = ['0','1','1'];
+            return function (n) {
+                if (memo[n]) {
+                    return memo[n]
+                }
+                var i=memo.length;
+                for (i;i<=n;i++) {
+                    memo[i] = Euler.utils.largeSum(memo[i-1], memo[i-2]);
+                }
+                return memo[n];
             }
+        }();
+
+        Euler.utils.largeMax = function (a, b) {
             var maxLen = Math.max(('' + a).length, ('' + b).length);
             var _a = ('' + a).padStart(maxLen, '0');
             var _b = ('' + b).padStart(maxLen, '0');
@@ -205,9 +216,6 @@ var EulerFactory = (
         }
 
         Euler.utils.largeMin = function (a, b) {
-            if (!isNaN(+a) && !isNaN(+b) && isFinite(+a) && isFinite(+b)) {
-                return a > b ? b : a;
-            }
             var maxLen = Math.max(('' + a).length, ('' + b).length);
             var _a = ('' + a).padStart(maxLen, '0');
             var _b = ('' + b).padStart(maxLen, '0');
@@ -225,7 +233,13 @@ var EulerFactory = (
 
         //TODO: change algorithm
         Euler.utils.largeProduct = function (...args) {
-            
+            if (
+                !isNaN(+args[0]) && !isNaN(+args[1]) 
+                && args[0]*args[1]>Number.MIN_SAFE_INTEGER
+                && args[0]*args[1]<Number.MAX_SAFE_INTEGER 
+            ) {
+                return ''+(args[0]*args[1]);
+            }
             var num1 = Euler.utils.largeMax(args[0], args[1]);
             var num2 = Euler.utils.largeMin(args[0], args[1]);
             if (num1 == 0 || num2 == 0) {
@@ -239,6 +253,13 @@ var EulerFactory = (
         }
 
         Euler.utils.largePow = function (...args) {
+            if (
+                !isNaN(+args[0]) && !isNaN(+args[1]) 
+                && Math.pow(args[0],args[1])>Number.MIN_SAFE_INTEGER
+                && Math.pow(args[0],args[1])<Number.MAX_SAFE_INTEGER 
+            ) {
+                return ''+Math.pow(args[0],args[1]);
+            }
             var curNum = args[0];
 
             for (var i = 2; i <= args[1]; i++) {
@@ -252,6 +273,11 @@ var EulerFactory = (
         }
 
         Euler.utils.largeSum = function (a, b) {
+            if (!isNaN(+a) && !isNaN(+b) && a+b>Number.MIN_SAFE_INTEGER && a+b<Number.MIN_SAFE_INTEGER) {
+                return ''+(+a + b);
+            }
+
+
             a = '' + a;
             b = '' + b;
             var maxLen = Math.max(a.length, b.length);
